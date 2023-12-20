@@ -1,0 +1,179 @@
+﻿@model EdChannel.Models.Order
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
+}
+<div class="content">
+    <div class="page-header">
+        <div class="page-header">
+            <div class="page-title">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3 class="page-title">Details</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a asp-action="Index">Orders</a></li>
+                            <li class="breadcrumb-item active">Details</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="page-btn ms-auto">
+                <a asp-action="Index" class="btn btn-added">
+                    <img src="~/img/icons/return1.svg" class="me-2" alt="img">Back to list
+                </a>
+            </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Status)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Status)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.SubTotal)
+                </dt>
+                <dd class="col-sm-10">
+                    $@Html.DisplayFor(model => model.SubTotal)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Shipping)
+                </dt>
+                <dd class="col-sm-10">
+                    $@Html.DisplayFor(model => model.Shipping)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Total)
+                </dt>
+                <dd class="col-sm-10">
+                    $@Html.DisplayFor(model => model.Total)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.GrandTotal)
+                </dt>
+                <dd class="col-sm-10">
+                    $@Html.DisplayFor(model => model.GrandTotal)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FirstName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.LastName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.LastName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Mobile)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Mobile)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Line1)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Line1)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.City)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.City)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Province)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Province)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Country)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Country)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Content)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Content)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.User)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.User.Id)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CreatedAt)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CreatedAt)
+                </dd>
+            </dl>
+
+            <div class="table-responsive">
+                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                    <table class="table datanew dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                        <thead>
+                            <tr role="row">
+                                @* <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="
+                                :                                   activate to sort column descending" style="width: 79.6625px;">
+                                <label class="checkboxs">
+                                <input type="checkbox" id="select-all">
+                                <span class="checkmarks"></span>
+                                </label>
+                                </th> *@
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 40px;">Title</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 40px;">Price</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 40px;">Quantity</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 40px;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int count = 0;
+                            }
+                            @foreach (var item in ViewBag.OrderItems)
+                            {
+
+                                <tr class="@(count % 2 == 0 ? "even" : "old")">
+                                    <td>
+                                        @item.Product.Title
+                                    </td>
+                                    <td>
+                                        @item.Product.Price
+                                    </td>
+                                    <td>
+                                        @item.Quantity
+                                    </td>
+                                    <td>
+                                        @(item.Product.Price * item.Quantity)
+                                    </td>
+                                </tr>
+                                count++;
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

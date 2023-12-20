@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="description" content="POS - Bootstrap Admin Template">
+    <meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern,  html5, responsive">
+    <meta name="author" content="Dreamguys - Bootstrap Admin Template">
+    <meta name="robots" content="noindex, nofollow">
+    <title>@ViewData["Title"]</title>
+
+    @* <link rel="shortcut icon" type="image/x-icon" href="~/img/favicon.png"> *@
+
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="~/css/animate.css">
+
+    <link rel="stylesheet" href="~/css/dataTables.bootstrap4.min.css">
+
+    <link rel="stylesheet" href="~/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="~/plugins/fontawesome/css/all.min.css">
+
+    <link rel="stylesheet" href="~/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="~/plugins/toastr/toatr.css">
+
+    <link rel="stylesheet" href="~/css/style.css">
+</head>
+<body>
+    <div id="global-loader">
+        <div class="whirly-loader"> </div>
+    </div>
+
+    <div class="main-wrapper">
+
+        @* @{Html.RenderPartial("_Sidebar");}
+        @{Html.RenderPartial("_Header");} *@
+        <partial name="~/Areas/Dashboard/Views/Shared/_Sidebar.cshtml" />
+        <partial name="~/Areas/Dashboard/Views/Shared/_Header.cshtml" />
+        <div class="page-wrapper">
+            @RenderBody()
+        </div>
+    </div>
+
+
+    <script src="~/js/jquery-3.6.0.min.js"></script>
+    <script src="~/plugins/toastr/toastr.min.js"></script>
+
+    <script src="~/js/feather.min.js"></script>
+
+    <script src="~/js/jquery.slimscroll.min.js"></script>
+
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/plugins/select2/js/select2.min.js"></script>
+     @* <script src="~/plugins/select2/js/custom-select.js"></script> *@
+    <script src="~/plugins/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="~/plugins/sweetalert/sweetalerts.min.js"></script>
+
+
+    <script src="~/plugins/apexchart/apexcharts.min.js"></script>
+    <script src="~/plugins/apexchart/chart-data.js"></script>
+
+    <script src="~/js/script.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        // document.querySelector(`a[href="/Dashboard"]`)?.parentElement.classList.remove("active")
+        // document.querySelector(`a[href="${location.pathname + location.search}"]`)?.classList.add("active")
+        // document.querySelector(`a[href="${location.pathname + location.search}"]`)?.parentElement.classList.add("active")
+        const [_, st1, st2, ...rest] = location.pathname.split("/")
+        const path = `/${st1}${st2 ? "/" + st2:""}`
+        document.querySelector(`a[href="/Dashboard"]`)?.parentElement.classList.remove("active")
+        document.querySelector(`a[href="${path + location.search}"]`)?.classList.add("active")
+        document.querySelector(`a[href="${path + location.search}"]`)?.parentElement.classList.add("active")
+    </script>
+</body>
+</html>

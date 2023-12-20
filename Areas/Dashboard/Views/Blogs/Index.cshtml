@@ -1,0 +1,122 @@
+﻿@model IEnumerable<EdChannel.Models.Blog>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
+}
+
+<partial name="~/Areas/Dashboard/Views/Shared/_Notification.cshtml" />
+
+<div class="content">
+    <div class="page-header">
+        <div class="page-title">
+            <h4>Blog list</h4>
+            <h6>View/Search Blog</h6>
+        </div>
+        <div class="page-btn">
+            <a asp-action="Create" class="btn btn-added">
+                <img src="~/img/icons/plus.svg" class="me-1" alt="img">Write blog
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-top">
+                <div class="search-set">
+                    <div class="search-path">
+                        <a class="btn btn-filter" id="filter_search">
+                            <img src="~/img/icons/filter.svg" alt="img">
+                            <span><img src="~/img/icons/closes.svg" alt="img"></span>
+                        </a>
+                    </div>
+                    <div class="search-input">
+                        <a class="btn btn-searchset"><img src="~/img/icons/search-white.svg" alt="img"></a>
+                        <div id="DataTables_Table_0_filter" class="dataTables_filter"><label> <input type="search" class="form-control form-control-sm" placeholder="Search..." aria-controls="DataTables_Table_0"></label></div>
+                    </div>
+                </div>
+                <div class="wordset">
+                    <ul>
+                        <li>
+                            <a data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="pdf" aria-label="pdf"><img src="~/img/icons/pdf.svg" alt="img"></a>
+                        </li>
+                        <li>
+                            <a data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="excel" aria-label="excel"><img src="~/img/icons/excel.svg" alt="img"></a>
+                        </li>
+                        <li>
+                            <a data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="print" aria-label="print"><img src="~/img/icons/printer.svg" alt="img"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                    <table class="table datanew dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                        <thead>
+                            <tr role="row">
+                                @* <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="
+                                :                                   activate to sort column descending" style="width: 79.6625px;">
+                                <label class="checkboxs">
+                                <input type="checkbox" id="select-all">
+                                <span class="checkmarks"></span>
+                                </label>
+                                </th> *@
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="@Html.DisplayNameFor(model => model.Title) name: activate to sort column ascending" style="width: 40px;">@Html.DisplayNameFor(model => model.Title)</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="@Html.DisplayNameFor(model => model.Description) name: activate to sort column ascending" style="width: 430.3125px;">@Html.DisplayNameFor(model => model.Description)</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="@Html.DisplayNameFor(model => model.Publish) name: activate to sort column ascending" style="width: 192.125px;">@Html.DisplayNameFor(model => model.Publish)</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="@Html.DisplayNameFor(model => model.Category): activate to sort column ascending" style="width:auto;">@Html.DisplayNameFor(model => model.Category)</th>
+                                <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 113.062px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int count = 0;
+                            }
+                            @foreach (var item in Model)
+                            {
+
+                                <tr class="@(count % 2 == 0 ? "even" : "old")">
+                                    @* <td>
+                                        @if (item.Image != null)
+                                        {
+                                            <img style="height: 40px;width: 40px;object-fit: contain;" src="~/images/@Html.DisplayFor(modelItem => item.Image)" />
+                                        }
+                                    </td> *@
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Title)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Publish)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Category.Title)
+                                    </td>
+                                    <td class="">
+                                        @* <a asp-action="Details" asp-route-id="@item.Id" style="margin-right: 15px;">
+                                    <img src="~/img/icons/eye.svg" style="width: 22px" alt="img" data-bs-original-title="Details" aria-label="Details" data-bs-toggle="tooltip">
+                                    </a> *@
+                                        <a asp-action="Edit" asp-route-id="@item.Id" style="margin-right: 15px;">
+                                            <img src="~/img/icons/edit.svg" alt="img" data-bs-original-title="Edit" aria-label="Edit" data-bs-toggle="tooltip">
+                                        </a>
+                                        <form asp-controller="Blogs" asp-action="Delete" asp-route-id="@item.Id" class="d-inline">
+                                            <input id="btnDelete-@item.Id" type="submit" name="@item.Id" value="Delete" class="btn btn-danger d-none" />
+                                            <label for="btnDelete-@item.Id">
+                                                <img src="~/img/icons/delete.svg" alt="img" data-bs-toggle="tooltip" data-bs-original-title="Delete" aria-label="Delete">
+                                            </label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                count++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

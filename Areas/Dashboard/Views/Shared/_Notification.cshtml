@@ -1,0 +1,25 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@if (TempData["Success"] != null)
+{
+    <script src="~/js/jquery-3.6.0.min.js"></script>
+    <script src="~/plugins/toastr/toastr.min.js"></script>
+    <script type="text/javascript">
+        window.addEventListener("load", () => {
+            toastr.success('@TempData["Success"]')
+        })
+    </script>
+}
+@if (TempData["Error"] != null)
+{
+    <script src="~/js/jquery-3.6.0.min.js"></script>
+    <script src="~/plugins/toastr/toastr.min.js"></script>
+    <script type="text/javascript">
+        window.addEventListener("load", () => {
+        toastr.error('@TempData["Error"]')
+        })
+
+    </script>
+}

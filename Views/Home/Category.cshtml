@@ -1,0 +1,264 @@
+﻿@model ICollection<Product>
+@{
+    ViewData["Title"] = "Category";
+    Layout = "~/Views/Shared/_LayoutSubHome.cshtml";
+}
+
+
+<!-- Start Breadcrumb Area  -->
+<div class="axil-breadcrumb-area">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="inner">
+                    <ul class="axil-breadcrumb">
+                        <li class="axil-breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="separator"></li>
+                        <li class="axil-breadcrumb-item active" aria-current="page">Categories</li>
+                    </ul>
+                    <h1 class="title">Explore All Products</h1>
+                </div>
+            </div>
+            @* <div class="col-lg-6 col-md-4">
+                <div class="inner">
+                    <div class="bradcrumb-thumb">
+                        <img src="~/images/product/product-45.png" alt="Image">
+                    </div>
+                </div>
+            </div> *@
+        </div>
+    </div>
+</div>
+<!-- End Breadcrumb Area  -->
+<!-- Start Shop Area  -->
+<div class="axil-shop-area axil-section-gap bg-color-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="axil-shop-sidebar">
+                    <div class="d-lg-none">
+                        <button class="sidebar-close filter-close-btn"><i class="fas fa-times"></i></button>
+                    </div>
+                    @if (ViewBag.Categories != null && ViewBag.Categories.Count > 0)
+                    {
+                        foreach (var item in ViewBag.Categories)
+                        {
+                            <div class="toggle-list product-categories active">
+                                <h6 class="title">@item.Title.ToUpper()</h6>
+                                <div class="shop-submenu">
+                                    <ul>
+                                         @* <li class="current-cat"><a href="#">Sun Care</a></li> *@
+
+                                        @if (ViewBag.SubCategories != null && ViewBag.SubCategories.Count>0)
+                                        {
+                                            foreach (var subItem in ViewBag.SubCategories)
+                                            {
+                                                if (subItem.ParentId == item.Id)
+                                                {
+                                                    <li class="itemSelect" data-slug="@subItem.Slug" data-id="@subItem.Id"><a href="javascript:void(0);">@subItem.Title</a></li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                    }
+                    <div class="toggle-list product-price-range active">
+                        <h6 class="title">PRICE</h6>
+                        <div class="shop-submenu">
+                            @* <ul>
+                                <li class="chosen"><a href="#">30</a></li>
+                                <li><a href="#">5000</a></li>
+                            </ul> *@
+                            <form action="#" class="mt--25" id="randomPrice">
+                                <div id="slider-range"></div>
+                                <div class="flex-center mt--20">
+                                    <span class="input-range">Price: </span>
+                                    <input type="text" id="amount" class="amount-range" readonly>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <button class="axil-btn btn-bg-primary btnResetAll">All Reset</button>
+                </div>
+                <!-- End .axil-shop-sidebar -->
+            </div>
+            <script>
+                document.querySelectorAll(".itemSelect").forEach(item=>{
+                    item.addEventListener("click", (e)=>{
+                        document.querySelectorAll(".itemSelect").forEach(pre => pre.classList.remove("current-cat"))
+                        e.currentTarget.classList.add("current-cat")
+                        document.querySelectorAll(`.productsItem[data-parent='${e.currentTarget.dataset.id}']`).forEach(pro => {
+                            pro.classList.remove("d-none")
+                            pro.classList.add("d-block")
+                        })
+                        document.querySelectorAll(`.productsItem:not([data-parent='${e.currentTarget.dataset.id}'])`).forEach(pro => {
+                            pro.classList.remove("d-block")
+                            pro.classList.add("d-none")
+                        })
+                    })
+                })
+                document.querySelector(".btnResetAll").addEventListener("click", e => {
+
+                    document.querySelectorAll(`.itemSelect`).forEach(pro => {
+                        pro.classList.remove("current-cat")
+                    })
+
+                    document.querySelectorAll(`.productsItem`).forEach(pro => {
+                        pro.classList.remove("d-block")
+                        pro.classList.remove("d-none")
+                    })
+                    document.querySelector("#amount").value = "$1  $3000"
+                })
+
+                window.addEventListener("load", () => {
+                    const params = new URLSearchParams(location.search)
+                    const sub = params.get("sub")
+                    if (sub) {
+                        console.log(sub)
+                        const firstEl = document.querySelector(`.itemSelect[data-slug='${sub}']`)
+                        firstEl.dispatchEvent(new Event("click"))
+                    }
+                })
+                document.querySelector("#randomPrice #slider-range").addEventListener("mouseup", e => {
+                    e.preventDefault()
+                    const input =  document.querySelector("#amount").value
+                    console.log(input)
+                    if (input) {
+                        const [min, max] = input.split("  ").map(val => Number(val.slice(1)))
+                        const listProduct = document.querySelectorAll(".price.current-price.proAmountPopup")
+                        listProduct.forEach(val => {
+                            const price = Number(val.textContent.slice(1))
+                            console.log(price)
+                            if (price < min || price > max) {
+                                val.closest(".productsItem").style.display = "none"
+                            } else {
+                                val.closest(".productsItem").style.display = "block"
+                            }
+                        })
+                    }
+                })
+                document.querySelector("#randomPrice #slider-range").addEventListener("mousedown", e => {
+                    e.preventDefault()
+                    const input = document.querySelector("#amount").value
+                    console.log(input)
+                    if (input) {
+                        const [min, max] = input.split("  ").map(val => Number(val.slice(1)))
+                        const listProduct = document.querySelectorAll(".price.current-price.proAmountPopup")
+                        listProduct.forEach(val => {
+                            const price = Number(val.textContent.slice(1))
+                            console.log(price)
+                            if (price < min || price > max) {
+                                val.closest(".productsItem").style.display = "none"
+                            } else {
+                                val.closest(".productsItem").style.display = "block"
+                            }
+                        })
+                    }
+                })
+            </script>
+            <div class="col-lg-9">
+                @* <div class="row">
+                    <div class="col-lg-12">
+                        <div class="axil-shop-top mb--40">
+                            <div class="category-select align-items-center justify-content-lg-end justify-content-between">
+                                <!-- Start Single Select  -->
+                                <span class="filter-results">Showing 1-12 of @Model.Count results</span>
+                                <select class="single-select">
+                                    <option>Short by Latest</option>
+                                    <option>Short by Oldest</option>
+                                    <option>Short by Name</option>
+                                    <option>Short by Price</option>
+                                </select>
+                                <!-- End Single Select  -->
+                            </div>
+                            <div class="d-lg-none">
+                                <button class="product-filter-mobile filter-toggle"><i class="fas fa-filter"></i> FILTER</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> *@
+                <!-- End .row -->
+                <div class="row row--15 listProduct">
+                    @if (Model != null)
+                    {
+                        int count = 0;
+                        foreach (var item in Model)
+                        {
+                            if (count <13)
+                            {
+                                <div class="col-xl-3 col-lg-4 col-sm-6 col-12 mb--30 productsItem" data-id="@item.Id" data-parent="@item.ProductCategories.FirstOrDefault().CategoryId">
+                                    <div class="axil-product product-style-one">
+                                        <div class="thumbnail">
+                                            <a href="/products/@item.Slug" class="thumbnailPro">
+                                                <img data-sal="fade" style="height: 200px; object-fit: cover;" data-sal-delay="100" class="imgThumb" data-sal-duration="1500" src="~/images/@item.Image" alt="Product Images">
+                                            </a>
+                                            @if (item.Discount > 0)
+                                            {
+                                                <div class="label-block label-right">
+                                                    <div class="product-badget disountProduct">@item.Discount% OFF</div>
+                                                </div>
+                                            }
+                                            <div class="product-hover-action">
+                                                <ul class="cart-action">
+                                                    <li class="quickview"><a href="javascript:void(0);" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#quick-view-modal"><i class="far fa-eye"></i></a></li>
+                                                    <li class="select-option"><a href="javascript:void(0);" class="btnAddToCart" data-id="@item.Id">Add to Cart</a></li>
+                                                    <li class="wishlist"><a href="javascript:void(0);" data-id="@item.Id"><i class="far fa-heart"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="product-content">
+                                            <div class="inner">
+                                                <h5 class="title"><a href="/products/@item.Slug" class="proTitlePopup">@item.Title</a></h5>
+                                                <div class="product-price-variant">
+                                                    @if (item.Discount > 0)
+                                                    {
+                                                        <span class="price old-price">$@item.Price</span>
+                                                        <span class="price current-price proAmountPopup">$@(item.Price - item.Price * item.Discount / 100)</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="price current-price proAmountPopup">$@item.Price</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            count++;
+                        }
+                    }
+                </div>
+                @if (Model != null && Model.Count > 12)
+                {
+                    <div class="text-center pt--20">
+                        <a href="#" class="axil-btn btn-bg-lighter btn-load-more">Load more</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!-- End .container -->
+</div>
+<!-- End Shop Area  -->
+<!-- Start Axil Newsletter Area  -->
+<div class="axil-newsletter-area axil-section-gap pt--0">
+    <div class="container">
+        <div class="etrade-newsletter-wrapper bg_image bg_image--5">
+            <div class="newsletter-content">
+                <span class="title-highlighter highlighter-primary2"><i class="fas fa-envelope-open"></i>Newsletter</span>
+                <h2 class="title mb--40 mb_sm--30">Get weekly update</h2>
+                <div class="input-group newsletter-form">
+                    <div class="position-relative newsletter-inner mb--15">
+                        <input placeholder="example@gmail.com" type="text">
+                    </div>
+                    <button type="submit" class="axil-btn mb--15">Subscribe</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End .container -->
+</div>
+<!-- End Axil Newsletter Area  -->

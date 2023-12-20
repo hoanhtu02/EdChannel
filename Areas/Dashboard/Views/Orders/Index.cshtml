@@ -1,0 +1,117 @@
+﻿@using EdChannel.Models;
+@model IEnumerable<EdChannel.Models.Order>
+@{
+    ViewData["Title"] = "Orders List";
+    Layout = "~/Areas/Dashboard/Views/Shared/_Layout.cshtml";
+}
+
+<partial name="~/Areas/Dashboard/Views/Shared/_Notification.cshtml" />
+
+<div class="content">
+    <div class="page-header">
+        <div class="page-title">
+            <h4>Order list</h4>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+
+            <div class="table-responsive">
+                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                    <table class="table datanew dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                        <thead>
+                            <tr role="row">
+                                @* <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="
+                                :                                   activate to sort column descending" style="width: 79.6625px;">
+                                <label class="checkboxs">
+                                <input type="checkbox" id="select-all">
+                                <span class="checkmarks"></span>
+                                </label>
+                                </th> *@
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="@Html.DisplayNameFor(model => model.Status) name: activate to sort column ascending" style="width: 200px;">@Html.DisplayNameFor(model => model.Status)</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="@Html.DisplayNameFor(model => model.Shipping) name: activate to sort column ascending" style="width: 40px;">@Html.DisplayNameFor(model => model.Shipping)</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="@Html.DisplayNameFor(model => model.OrderItems) name: activate to sort column ascending" style="width: 40px;">@Html.DisplayNameFor(model => model.OrderItems)</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="@Html.DisplayNameFor(model => model.Total) name: activate to sort column ascending" style="width: 40px;">@Html.DisplayNameFor(model => model.Total)</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="@Html.DisplayNameFor(model => model.Country) name: activate to sort column ascending" style="width: 40px;">@Html.DisplayNameFor(model => model.Country)</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="@Html.DisplayNameFor(model => model.Content) name: activate to sort column ascending" style="width: 430.3125px;">@Html.DisplayNameFor(model => model.Content)</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="@Html.DisplayNameFor(model => model.Content) name: activate to sort column ascending" style="width: 430.3125px;">@Html.DisplayNameFor(model => model.User.FullName)</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="@Html.DisplayNameFor(model => model.User.FullName) name: activate to sort column ascending" style="width: 192.125px;">@Html.DisplayNameFor(model => model.CreatedAt)</th>
+                                <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 113.062px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int count = 0;
+                                // status New, Checkout, Paid, Failed, Shipped, Delivered, Returned, Complete
+                                string[] status = { "New", "Checkout", "Paid", "Failed", "Shipped", "Delivered", "Returned", "Complete" };
+                                string[] shippingTypes = { "Free Ship", "Local Delivery", "Flat Rate" };
+                            }
+
+                            @foreach (var item in Model)
+                            {
+
+                                <tr class="@(count % 2 == 0 ? "even" : "old")" data-id="@item.Id">
+                                    <td>
+                                        <select>
+                                            @for (int i = 0; i < status.Length; i++)
+                                            {
+                                                <option value="@i" selected="@(item.Status == (OrderStatus)i)">@status[i]</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        @(item.Shipping == 0 ? shippingTypes[0] : item.Shipping == 35 ? shippingTypes[1] : shippingTypes[2])
+                                    </td>
+                                    <td>
+                                            @Html.DisplayFor(modelItem => item.OrderItems.Count)
+                                    </td>
+                                    <td>
+                                            @Html.DisplayFor(modelItem => item.SubTotal)
+                                    </td>
+                                    <td>
+                                            @Html.DisplayFor(modelItem => item.Country)
+                                    </td>
+                                    <td>
+                                            @Html.DisplayFor(modelItem => item.Content)
+                                    </td>
+                                    <td>
+                                            @Html.DisplayFor(modelItem => item.User.FullName)
+                                    </td>
+                                    <td>
+                                            @Html.DisplayFor(modelItem => item.CreatedAt)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                    </td>
+                                </tr>
+                                count++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="~/js/jquery-3.6.0.min.js"></script>
+<script src="~/plugins/toastr/toastr.min.js"></script>
+<script>
+    const tbody = document.querySelector('tbody');
+    tbody.addEventListener("change", e => { 
+        const select = e.target;
+        const id = select.closest('tr').dataset.id;
+        const status = select.value;
+        fetch(`/api/orders/${id}/update/${status}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+            , body: JSON.stringify({id, status})
+        })
+            .then(res => {
+                toastr.success('Update status successfully!')
+        })
+    })
+</script>
